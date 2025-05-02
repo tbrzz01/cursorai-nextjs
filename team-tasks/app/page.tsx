@@ -1,13 +1,17 @@
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Welcome } from "@/components/welcome"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#18181b]">
-      <ThemeToggle />
-      <div className="pt-16">
-        <Welcome />
-      </div>
-    </div>
+    <main className="p-8">
+       <div className="flex justify-end mb-4">
+         <ThemeToggle />
+       </div>
+       <Card className="p-6">
+         <h1 className="text-2xl font-bold mb-4">Welcome</h1>
+         <Button>Click me</Button>
+       </Card>
+     </main>
   )
 }
