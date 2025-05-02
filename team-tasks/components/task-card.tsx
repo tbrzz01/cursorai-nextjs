@@ -8,12 +8,7 @@ import { TaskDialog } from "@/components/task-dialog";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
-
-const assignees = [
-  { name: "Alice" },
-  { name: "Bob" },
-  { name: "Charlie" },
-];
+import { assignees } from "@/lib/assignees";
 
 type Task = { id: number; title: string; description: string; assignee: string; status: string };
 
@@ -34,7 +29,13 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
           <span className="text-base font-semibold text-neutral-900 dark:text-neutral-50">{task.title}</span>
           <div className="flex items-center gap-2">
             <Avatar className="h-7 w-7">
-              <AvatarFallback>{initials(assignee)}</AvatarFallback>
+              {(() => {
+                const found = assignees.find(a => a.name === assignee);
+                if (found) {
+                  return <img src={found.avatar} alt={found.name} className="h-7 w-7 rounded-full object-cover" />;
+                }
+                return <AvatarFallback>{initials(assignee)}</AvatarFallback>;
+              })()}
             </Avatar>
             <Select value={assignee} onValueChange={setAssignee}>
               <SelectTrigger className="w-[100px] h-7 text-xs">
@@ -42,7 +43,8 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
               </SelectTrigger>
               <SelectContent>
                 {assignees.map((a) => (
-                  <SelectItem key={a.name} value={a.name} className="text-xs">
+                  <SelectItem key={a.name} value={a.name} className="text-xs flex items-center gap-2">
+                    <img src={a.avatar} alt={a.name} className="h-5 w-5 rounded-full inline-block mr-2" />
                     {a.name}
                   </SelectItem>
                 ))}

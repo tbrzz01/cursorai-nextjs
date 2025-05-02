@@ -16,12 +16,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-
-const assignees = [
-  { name: "Alice" },
-  { name: "Bob" },
-  { name: "Charlie" },
-];
+import { assignees } from "@/lib/assignees";
 
 const TaskSchema = z.object({
   title: z.string().min(2, "Title is required"),
@@ -114,7 +109,8 @@ export function TaskDialog({
                       </SelectTrigger>
                       <SelectContent>
                         {assignees.map((a) => (
-                          <SelectItem key={a.name} value={a.name}>
+                          <SelectItem key={a.name} value={a.name} className="flex items-center gap-2">
+                            <img src={a.avatar} alt={a.name} className="h-5 w-5 rounded-full inline-block mr-2" />
                             {a.name}
                           </SelectItem>
                         ))}
