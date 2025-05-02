@@ -1,13 +1,14 @@
-//import KanbanBoardClient from "@/components/kanban-board-client";
+"use client";
+
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import TaskCard from "@/components/task-card";
 import { TaskDialog } from "@/components/task-dialog";
 import { Button } from "@/components/ui/button";
-import { getColumns, getTasks } from "@/lib/data";
 
-export default async function KanbanBoard() {
-  const columns = await getColumns();
-  const tasks = await getTasks();
+export default function KanbanBoardClient({ columns, tasks }: {
+  columns: { id: number; name: string; order: number }[];
+  tasks: { id: number; title: string; description: string | null; assignee: string | null; status: string; columnId?: number | null }[];
+}) {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
