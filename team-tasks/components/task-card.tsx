@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
 import { assignees } from "@/lib/assignees";
 
-type Task = { id: number; title: string; description: string; assignee: string; status: string };
+type Task = { id: number; title: string; description: string | null; assignee: string | null; status: string; columnId?: number | null };
 
 type TaskCardProps = {
   task: Task;
@@ -18,9 +18,9 @@ type TaskCardProps = {
 };
 
 export default function TaskCard({ task, onEdit }: TaskCardProps) {
-  const [assignee, setAssignee] = useState(task.assignee);
+  const [assignee, setAssignee] = useState(task.assignee ?? "");
   const [editOpen, setEditOpen] = useState(false);
-  const initials = (name: string) => name.split(" ").map((n) => n[0]).join("").toUpperCase();
+  const initials = (name: string) => name ? name.split(" ").map((n) => n[0]).join("").toUpperCase() : "?";
 
   return (
     <Card className="border-primary/30 bg-white dark:bg-neutral-950 shadow-md hover:shadow-lg transition-shadow">
@@ -37,7 +37,7 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
                 return <AvatarFallback>{initials(assignee)}</AvatarFallback>;
               })()}
             </Avatar>
-            <Select value={assignee} onValueChange={setAssignee}>
+            <Select value={assignee ?? ""} onValueChange={setAssignee}>
               <SelectTrigger className="w-[100px] h-7 text-xs">
                 <SelectValue placeholder="Assignee" />
               </SelectTrigger>
@@ -66,8 +66,8 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
               trigger={<span />}
               initialValues={{
                 title: task.title,
-                description: task.description,
-                assignee: task.assignee,
+                description: task.description ?? "",
+                assignee: task.assignee ?? "",
               }}
               onSubmit={(values) => {
                 if (onEdit) onEdit({ ...task, ...values });
@@ -79,7 +79,7 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
           </div>
         </div>
         <div className="text-sm text-neutral-600 dark:text-neutral-300 mb-1">
-          {task.description}
+          {task.description ?? <span className="italic text-neutral-400">No description</span>}
         </div>
       </CardContent>
     </Card>

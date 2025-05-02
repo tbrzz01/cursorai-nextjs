@@ -29,7 +29,7 @@ type TaskFormValues = z.infer<typeof TaskSchema>;
 type TaskDialogProps = {
   trigger: React.ReactNode;
   initialValues?: Partial<TaskFormValues>;
-  onSubmit: (values: TaskFormValues) => void;
+  onSubmit?: (values: TaskFormValues) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
@@ -56,7 +56,7 @@ export function TaskDialog({
   });
 
   function handleSubmit(values: TaskFormValues) {
-    onSubmit(values);
+    if (onSubmit) onSubmit(values);
     onOpenChange(false);
     form.reset();
   }
