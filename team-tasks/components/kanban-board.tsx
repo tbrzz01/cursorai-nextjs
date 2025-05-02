@@ -1,12 +1,13 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import TaskCard from "@/components/task-card";
 
 const mockTasks = [
-  { id: 1, title: "Design homepage", status: "Todo" },
-  { id: 2, title: "Set up database", status: "In Progress" },
-  { id: 3, title: "Write documentation", status: "Done" },
-  { id: 4, title: "Implement login", status: "Todo" },
-  { id: 5, title: "API integration", status: "In Progress" },
-  { id: 6, title: "Deploy to Vercel", status: "Done" },
+  { id: 1, title: "Design homepage", description: "Create the main landing page.", assignee: "Alice", status: "Todo" },
+  { id: 2, title: "Set up database", description: "Initialize PostgreSQL instance.", assignee: "Bob", status: "In Progress" },
+  { id: 3, title: "Write documentation", description: "Document API endpoints.", assignee: "Charlie", status: "Done" },
+  { id: 4, title: "Implement login", description: "OAuth2 with Google.", assignee: "Alice", status: "Todo" },
+  { id: 5, title: "API integration", description: "Connect frontend to backend.", assignee: "Bob", status: "In Progress" },
+  { id: 6, title: "Deploy to Vercel", description: "Production deployment.", assignee: "Charlie", status: "Done" },
 ];
 
 const columns = [
@@ -26,9 +27,7 @@ export default function KanbanBoard() {
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               {mockTasks.filter((task) => task.status === column.key).map((task) => (
-                <Card key={task.id} className="border-primary/30 bg-white dark:bg-neutral-950">
-                  <CardContent className="p-4 text-base font-medium">{task.title}</CardContent>
-                </Card>
+                <TaskCard key={task.id} task={task} />
               ))}
             </CardContent>
           </Card>
