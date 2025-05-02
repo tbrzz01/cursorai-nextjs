@@ -4,6 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useState } from "react";
+import { TaskDialog } from "@/components/task-dialog";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreVertical } from "lucide-react";
 
 const assignees = [
   { name: "Alice" },
@@ -11,8 +15,16 @@ const assignees = [
   { name: "Charlie" },
 ];
 
-export default function TaskCard({ task }: { task: { id: number; title: string; description: string; assignee: string } }) {
+type Task = { id: number; title: string; description: string; assignee: string; status: string };
+
+type TaskCardProps = {
+  task: Task;
+  onEdit?: (updated: Task) => void;
+};
+
+export default function TaskCard({ task, onEdit }: TaskCardProps) {
   const [assignee, setAssignee] = useState(task.assignee);
+  const [editOpen, setEditOpen] = useState(false);
   const initials = (name: string) => name.split(" ").map((n) => n[0]).join("").toUpperCase();
 
   return (
@@ -36,6 +48,32 @@ export default function TaskCard({ task }: { task: { id: number; title: string; 
                 ))}
               </SelectContent>
             </Select>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-7 w-7 p-0">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setEditOpen(true)}>
+                  Edit
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <TaskDialog
+              trigger={<span />}
+              initialValues={{
+                title: task.title,
+                description: task.description,
+                assignee: task.assignee,
+              }}
+              onSubmit={(values) => {
+                if (onEdit) onEdit({ ...task, ...values });
+                setEditOpen(false);
+              }}
+              open={editOpen}
+              onOpenChange={setEditOpen}
+            />
           </div>
         </div>
         <div className="text-sm text-neutral-600 dark:text-neutral-300 mb-1">
